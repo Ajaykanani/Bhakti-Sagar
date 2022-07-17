@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "81466929763",
+    "project_id": "bhakti-sagar-e4539",
+    "storage_bucket": "bhakti-sagar-e4539.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:81466929763:android:3fec7a93a6b4b429e2be56",
+        "android_client_info": {
+          "package_name": "com.example.bhakti_sagar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "81466929763-isc52c6dff51onhebb36e6qcsjtb4kbs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrSGGsjsYFLmKAsT7AbhGo-EHXuyLM_Xc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "81466929763-isc52c6dff51onhebb36e6qcsjtb4kbs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
