@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:bhakti_sagar/pages/more_songs_page_1.dart';
-import 'package:bhakti_sagar/pages/temp.dart';
 import 'package:bhakti_sagar/widgets/colors.dart';
 import 'package:flutter/material.dart';
 

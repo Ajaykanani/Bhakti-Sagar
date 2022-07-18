@@ -2,7 +2,6 @@ import 'package:bhakti_sagar/pages/more_songs_page_2.dart';
 import 'package:bhakti_sagar/widgets/colors.dart';
 import 'package:bhakti_sagar/widgets/profile_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:bhakti_sagar/pages/temp2.dart';
 import '../utilities/storage_service.dart';
 
 class MoreSongsPage1 extends StatefulWidget {
