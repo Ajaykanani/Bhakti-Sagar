@@ -1,21 +1,20 @@
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 
 class Storage {
   final FirebaseStorage storage = FirebaseStorage.instance;
 
   Future listOfBhagwans() async {
-    ListResult result = await storage.ref("Bhakti Sagar").listAll();
-    return result;
+    return await storage.ref("Bhakti Sagar").listAll();
   }
 
   Future getBhagwanImage(String bhagwanName) async {
-    ListResult result = await storage.ref("Bhakti Sagar/${bhagwanName}/images").listAll();
+    var result =  await storage.ref("Bhakti Sagar/${bhagwanName}/images").child("${bhagwanName}.jpeg").getDownloadURL();
     return result;
   }
 
   Future listOfSongs(String bhagwanName) async {
-    ListResult result = await storage.ref("Bhakti Sagar/${bhagwanName}/songs").listAll();
+    var result = await storage.ref("Bhakti Sagar/${bhagwanName}/songs").listAll();
     return result;
   }
-
 }

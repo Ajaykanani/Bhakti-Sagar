@@ -1,19 +1,29 @@
-import 'package:bhakti_sagar/pages/more_songs_page_2.dart';
 import 'package:bhakti_sagar/widgets/colors.dart';
 import 'package:bhakti_sagar/widgets/profile_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:bhakti_sagar/pages/temp2.dart';
 import '../utilities/storage_service.dart';
 
-class MoreSongsPage1 extends StatefulWidget {
-  const MoreSongsPage1({Key? key}) : super(key: key);
-
+class MoreSongsPage2 extends StatefulWidget {
+  const MoreSongsPage2({Key? key, required this.bhagwanName}) : super(key: key);
+  final String bhagwanName;
   @override
-  State<MoreSongsPage1> createState() => _MoreSongsPage1State();
+  State<MoreSongsPage2> createState() => _MoreSongsPage2State();
 }
 
-class _MoreSongsPage1State extends State<MoreSongsPage1> {
+class _MoreSongsPage2State extends State<MoreSongsPage2> {
   final Storage storage = Storage();
+
+  String removeExtension(String fileName1) {
+    String result = "";
+    List name = fileName1.split('.');
+
+    for(int i=0; i<name.length-1; i++) {
+      result += name[i];
+    }
+
+    return  result;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +43,7 @@ class _MoreSongsPage1State extends State<MoreSongsPage1> {
       ),
       body: Center(
         child: FutureBuilder(
-          future: storage.listOfBhagwans(),
+          future: storage.listOfSongs(widget.bhagwanName),
           builder: (context, AsyncSnapshot snapshot) {
             if (snapshot.connectionState == ConnectionState.done &&
                 snapshot.hasData) {
@@ -42,31 +52,28 @@ class _MoreSongsPage1State extends State<MoreSongsPage1> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.0,horizontal: 12.0),
                   child: ListView.builder(
-                    itemCount: snapshot.data.prefixes.length,
+                    itemCount: snapshot.data.items.length,
                     itemBuilder: (context, index) {
                       return InkWell(
-                        onTap: (){
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => MoreSongsPage2(bhagwanName: snapshot.data.prefixes[index].name)),
-                          );
-                        },
+                        onTap: (){},
                         child: Card(
                           color: MyColor.brown,
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Row(
                               children: [
-                                ProfileWidget(userProfilePic: snapshot.data.prefixes[index].name, size: 60, padding: 0),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    snapshot.data.prefixes[index].name,
-                                    style: TextStyle(
-                                      color: MyColor.darkBrown,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                      overflow: TextOverflow.ellipsis,
+                                ProfileWidget(userProfilePic: snapshot.data.items[index].parent.parent.name, size: 60, padding: 0),
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      removeExtension(snapshot.data.items[index].name),
+                                      style: TextStyle(
+                                        color: MyColor.darkBrown,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
                                     ),
                                   ),
                                 ),

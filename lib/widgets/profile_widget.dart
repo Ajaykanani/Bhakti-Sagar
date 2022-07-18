@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import '../utilities/storage_service.dart';
 import 'colors.dart';
 
 class ProfileWidget extends StatelessWidget {
@@ -11,6 +11,7 @@ class ProfileWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Storage storage = Storage();
     return Padding(
       padding: EdgeInsets.all(padding),
       child: Container(
@@ -34,20 +35,25 @@ class ProfileWidget extends StatelessWidget {
             shape: BoxShape.circle,
             color: MyColor.white,
           ),
-          child: Container(
-            height: size-10,
-            width: size-10,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: MyColor.black, width: 0.5, style: BorderStyle.solid),
-              image: DecorationImage(
-                  image: AssetImage(
-                    userProfilePic,
+          child: FutureBuilder(
+            future: storage.getBhagwanImage(userProfilePic),
+            builder: (context, AsyncSnapshot snapshot) {
+              return Container(
+                height: size-10,
+                width: size-10,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: MyColor.black, width: 0.5, style: BorderStyle.solid),
+                  image: DecorationImage(
+                      image: NetworkImage(
+                        snapshot.data.toString(),
+                      ),
+                      fit: BoxFit.fill
                   ),
-                  fit: BoxFit.cover
-              ),
-            ),
-          ),
+                ),
+              );
+            },
+          )
         ),
       ),
     );
