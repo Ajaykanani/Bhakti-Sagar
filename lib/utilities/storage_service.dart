@@ -8,7 +8,7 @@ class Storage {
     return result;
   }
 
-  Future listOfImages(String bhagwanName) async {
+  Future getBhagwanImage(String bhagwanName) async {
     ListResult result = await storage.ref("Bhakti Sagar/${bhagwanName}/images").listAll();
     return result;
   }
@@ -17,4 +17,5 @@ class Storage {
     ListResult result = await storage.ref("Bhakti Sagar/${bhagwanName}/songs").listAll();
     return result;
   }
+
 }

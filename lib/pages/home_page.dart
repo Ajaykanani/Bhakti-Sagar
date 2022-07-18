@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:bhakti_sagar/pages/more_songs_page_1.dart';
 import 'package:bhakti_sagar/pages/temp.dart';
 import 'package:bhakti_sagar/widgets/colors.dart';
 import 'package:flutter/material.dart';
@@ -42,8 +43,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return Scaffold(
       drawer: Drawer(),
       appBar: AppBar(
-        title: Text("Bhakti Sagar"),
-        centerTitle: true,
+          centerTitle: true,
+          title: Text(
+            "Bhakti Sagar",
+            style: TextStyle(
+              color: MyColor.darkBrown,
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          backgroundColor: MyColor.brown
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -274,7 +284,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                 onTap: () {
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => TempPage()),
+                                    MaterialPageRoute(builder: (context) => MoreSongsPage1()),
                                   );
                                 },
                                 child: Column(
