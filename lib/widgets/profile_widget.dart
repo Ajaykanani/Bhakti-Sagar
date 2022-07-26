@@ -38,20 +38,30 @@ class ProfileWidget extends StatelessWidget {
           child: FutureBuilder(
             future: storage.getBhagwanImage(userProfilePic),
             builder: (context, AsyncSnapshot snapshot) {
-              return Container(
-                height: size-10,
-                width: size-10,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: MyColor.black, width: 0.5, style: BorderStyle.solid),
-                  image: DecorationImage(
-                      image: NetworkImage(
-                        snapshot.data.toString(),
-                      ),
-                      fit: BoxFit.fill
+              if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+                return Container(
+                  height: size-10,
+                  width: size-10,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: MyColor.black, width: 0.5, style: BorderStyle.solid),
+                    image: DecorationImage(
+                        image: NetworkImage(
+                          snapshot.data.toString(),
+                        ),
+                        fit: BoxFit.fill
+                    ),
                   ),
-                ),
-              );
+                );
+              } else {
+                return Container(
+                  alignment: Alignment.center,
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: CircularProgressIndicator(color: MyColor.brown),
+                  ),
+                );
+              }
             },
           )
         ),

@@ -1,7 +1,11 @@
+import 'package:audioplayers/audioplayers.dart';
+import 'package:bhakti_sagar/utilities/audio_service.dart';
+import 'package:bhakti_sagar/utilities/song_controller.dart';
 import 'package:bhakti_sagar/widgets/colors.dart';
 import 'package:bhakti_sagar/widgets/profile_widget.dart';
 import 'package:flutter/material.dart';
 import '../utilities/storage_service.dart';
+import 'home_page.dart';
 
 class MoreSongsPage2 extends StatefulWidget {
   const MoreSongsPage2({Key? key, required this.bhagwanName}) : super(key: key);
@@ -11,6 +15,7 @@ class MoreSongsPage2 extends StatefulWidget {
 }
 
 class _MoreSongsPage2State extends State<MoreSongsPage2> {
+
   final Storage storage = Storage();
 
   String removeExtension(String fileName1) {
@@ -54,7 +59,25 @@ class _MoreSongsPage2State extends State<MoreSongsPage2> {
                     itemCount: snapshot.data.items.length,
                     itemBuilder: (context, index) {
                       return InkWell(
-                        onTap: (){},
+                        onTap: (){
+                          if(SongController.bhagwanName!=snapshot.data.items[index].parent.parent.name && SongController.songName!=snapshot.data.items[index].name) {
+                            MyAudioPlayer.stopMusic();
+                            SongController.songPlay = true;
+                            storage.getSongUrl(
+                                snapshot.data.items[index].parent.parent.name,
+                                snapshot.data.items[index].name).then(
+                                    (songUrl) {
+                                      SongController.setSongDetails(
+                                          bN: snapshot.data.items[index].parent.parent.name,
+                                          sN: snapshot.data.items[index].name,
+                                          sUrl: songUrl
+                                      );
+                                      SongController.songPlay = MyAudioPlayer.playMusic(songUrl);
+                                    }
+                            );
+                            setState((){});
+                          }
+                        },
                         child: Card(
                           color: MyColor.brown,
                           child: Padding(

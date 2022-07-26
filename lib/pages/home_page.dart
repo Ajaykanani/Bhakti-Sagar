@@ -4,11 +4,12 @@ import 'package:bhakti_sagar/pages/more_songs_page_1.dart';
 import 'package:bhakti_sagar/widgets/colors.dart';
 import 'package:flutter/material.dart';
 
+import '../utilities/audio_service.dart';
+import '../utilities/song_controller.dart';
 import '../widgets/firing_spirit_lamp_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
-
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -52,7 +53,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          backgroundColor: MyColor.brown
+          backgroundColor: MyColor.brown,
+        leading: null,
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -227,7 +229,22 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               InkWell(
-                                onTap: (){},
+                                onTap: (){
+                                  if(SongController.songPlay == false) {
+                                    SongController.songPlay = true;
+                                    if(SongController.songUrl != ""){
+                                      MyAudioPlayer.playMusic(SongController.songUrl);
+                                    }
+                                    else {
+                                      MyAudioPlayer.playMusicFromAsset("songs/HanumanChalisa.mp3");
+                                    }
+                                  }
+                                  else {
+                                    SongController.songPlay = false;
+                                    MyAudioPlayer.stopMusic();
+                                  }
+                                  setState((){});
+                                },
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -238,7 +255,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                         backgroundColor: MyColor.brown,
                                         radius: 22,
                                         child: Icon(
-                                          Icons.play_arrow,
+                                          SongController.songPlay ==true?Icons.stop_sharp:Icons.play_arrow,
                                           color: MyColor.white,
                                           size: 40,
                                         ),
@@ -247,7 +264,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                     Padding(
                                       padding: const EdgeInsets.only(top: 5),
                                       child: Text(
-                                        "Play",
+                                        SongController.songPlay ==true?"Stop":"Play",
                                         style: TextStyle(
                                           color: MyColor.darkBrown,
                                           fontWeight: FontWeight.bold,
