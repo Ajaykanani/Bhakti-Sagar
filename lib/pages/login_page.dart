@@ -1,10 +1,10 @@
+import 'package:bhakti_sagar/pages/forgot_password_page.dart';
 import 'package:bhakti_sagar/utilities/auth_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../widgets/colors.dart';
-import 'home_page.dart';
 import 'registration_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -15,22 +15,18 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // form key
+
   final _formKey = GlobalKey<FormState>();
 
-  // editing controller
   final TextEditingController emailController = new TextEditingController();
   final TextEditingController passwordController = new TextEditingController();
 
-  // firebase
   final _auth = FirebaseAuth.instance;
 
-  // string for displaying the error Message
   String? errorMessage;
 
   @override
   Widget build(BuildContext context) {
-    //email field
     final emailField = TextFormField(
         autofocus: false,
         controller: emailController,
@@ -39,7 +35,6 @@ class _LoginPageState extends State<LoginPage> {
           if (value!.isEmpty) {
             return ("Please Enter Your Email");
           }
-          // reg expression for email validation
           if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
               .hasMatch(value)) {
             return ("Please Enter a valid email");
@@ -59,7 +54,6 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ));
 
-    //password field
     final passwordField = TextFormField(
         autofocus: false,
         controller: passwordController,
@@ -89,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
     final loginButton = Material(
       elevation: 5,
       borderRadius: BorderRadius.circular(30),
-      color: Colors.redAccent,
+      color: MyColor.brown,
       child: MaterialButton(
           padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           minWidth: MediaQuery.of(context).size.width,
@@ -105,40 +99,57 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: MyColor.white,
       body: Center(
         child: SingleChildScrollView(
           child: Container(
-            color: Colors.white,
+            color: MyColor.white,
             child: Padding(
               padding: const EdgeInsets.all(36.0),
               child: Form(
                 key: _formKey,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
-                    SizedBox(
-                        height: 200,
-                        child: Image.asset(
-                          "assets/images/logo.png",
-                          fit: BoxFit.contain,
-                        )),
-                    SizedBox(height: 45),
+                    Center(
+                      child: SizedBox(
+                          height: 200,
+                          child: Image.asset(
+                            "assets/images/logo.png",
+                            fit: BoxFit.contain,
+                          )),
+                    ),
+                    SizedBox(height: 38),
                     emailField,
                     SizedBox(height: 25),
                     passwordField,
-                    SizedBox(height: 35),
+                    SizedBox(height: 5),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    ForgotPasswordPage()));
+                      },
+                      child: Text(
+                        "Forgot Password?",
+                        style: TextStyle(
+                            color: MyColor.brown,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15),
+                      ),
+                    ),
+                    SizedBox(height: 26),
                     loginButton,
-                    SizedBox(height: 15),
+                    SizedBox(height: 12),
                     Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Text("Don't have an account? "),
                           GestureDetector(
                             onTap: () {
-                              Navigator.push(
-                                  context,
+                              Navigator.of(context).pushReplacement(
                                   MaterialPageRoute(
                                       builder: (context) =>
                                           RegistrationPage()));
@@ -146,7 +157,7 @@ class _LoginPageState extends State<LoginPage> {
                             child: Text(
                               "SignUp",
                               style: TextStyle(
-                                  color: Colors.redAccent,
+                                  color: MyColor.brown,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15),
                             ),
@@ -177,7 +188,6 @@ class _LoginPageState extends State<LoginPage> {
         switch (error.code) {
           case "invalid-email":
             errorMessage = "Your email address appears to be malformed.";
-
             break;
           case "wrong-password":
             errorMessage = "Your password is wrong.";

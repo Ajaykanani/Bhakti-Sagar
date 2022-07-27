@@ -1,11 +1,12 @@
-import 'package:bhakti_sagar/pages/home_page.dart';
 import 'package:bhakti_sagar/utilities/auth_controller.dart';
+import 'package:bhakti_sagar/widgets/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../utilities/user_model.dart';
+import 'login_page.dart';
 
 class RegistrationPage extends StatefulWidget {
   const RegistrationPage({Key? key}) : super(key: key);
@@ -17,13 +18,10 @@ class RegistrationPage extends StatefulWidget {
 class _RegistrationPageState extends State<RegistrationPage> {
   final _auth = FirebaseAuth.instance;
   
-  // string for displaying the error Message
   String? errorMessage;
 
-
-  // our form key
   final _formKey = GlobalKey<FormState>();
-  // editing Controller
+
   final firstNameEditingController = new TextEditingController();
   final secondNameEditingController = new TextEditingController();
   final emailEditingController = new TextEditingController();
@@ -32,7 +30,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
   @override
   Widget build(BuildContext context) {
-    //first name field
     final firstNameField = TextFormField(
         autofocus: false,
         controller: firstNameEditingController,
@@ -60,7 +57,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
           ),
         ));
 
-    //second name field
     final secondNameField = TextFormField(
         autofocus: false,
         controller: secondNameEditingController,
@@ -84,7 +80,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
           ),
         ));
 
-    //email field
     final emailField = TextFormField(
         autofocus: false,
         controller: emailEditingController,
@@ -113,7 +108,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
           ),
         ));
 
-    //password field
     final passwordField = TextFormField(
         autofocus: false,
         controller: passwordEditingController,
@@ -140,7 +134,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
           ),
         ));
 
-    //confirm password field
     final confirmPasswordField = TextFormField(
         autofocus: false,
         controller: confirmPasswordEditingController,
@@ -165,11 +158,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
           ),
         ));
 
-    //signup button
     final signUpButton = Material(
       elevation: 5,
       borderRadius: BorderRadius.circular(30),
-      color: Colors.redAccent,
+      color: MyColor.brown,
       child: MaterialButton(
           padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           minWidth: MediaQuery.of(context).size.width,
@@ -180,55 +172,67 @@ class _RegistrationPageState extends State<RegistrationPage> {
             "SignUp",
             textAlign: TextAlign.center,
             style: TextStyle(
-                fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
+                fontSize: 20, color: MyColor.white, fontWeight: FontWeight.bold),
           )),
     );
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.red),
-          onPressed: () {
-            // passing this to our root
-            Navigator.of(context).pop();
-          },
-        ),
-      ),
+      backgroundColor: MyColor.white,
       body: Center(
         child: SingleChildScrollView(
-          child: Container(
-            color: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.all(36.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    SizedBox(
-                        height: 180,
-                        child: Image.asset(
-                          "assets/images/logo.png",
-                          fit: BoxFit.contain,
-                        )),
-                    SizedBox(height: 45),
-                    firstNameField,
-                    SizedBox(height: 20),
-                    secondNameField,
-                    SizedBox(height: 20),
-                    emailField,
-                    SizedBox(height: 20),
-                    passwordField,
-                    SizedBox(height: 20),
-                    confirmPasswordField,
-                    SizedBox(height: 20),
-                    signUpButton,
-                    SizedBox(height: 15),
-                  ],
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 35),
+            child: Container(
+              color: MyColor.white,
+              child: Padding(
+                padding: const EdgeInsets.all(38.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      SizedBox(
+                          height: 190,
+                          child: Image.asset(
+                            "assets/images/logo.png",
+                            fit: BoxFit.contain,
+                          )),
+                      SizedBox(height: 45),
+                      firstNameField,
+                      SizedBox(height: 20),
+                      secondNameField,
+                      SizedBox(height: 20),
+                      emailField,
+                      SizedBox(height: 20),
+                      passwordField,
+                      SizedBox(height: 20),
+                      confirmPasswordField,
+                      SizedBox(height: 20),
+                      signUpButton,
+                      SizedBox(height: 15),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text("You have an account? "),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            LoginPage()));
+                              },
+                              child: Text(
+                                "SignIn",
+                                style: TextStyle(
+                                    color: MyColor.brown,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15),
+                              ),
+                            )
+                          ])
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -275,16 +279,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
     }
   }
   postDetailsToFirestore() async {
-    // calling our firestore
-    // calling our user model
-    // sedning these values
-
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     User? user = _auth.currentUser;
 
     UserModel userModel = UserModel();
-
-    // writing all the values
     userModel.email = user!.email;
     userModel.uid = user.uid;
     userModel.firstName = firstNameEditingController.text;
@@ -294,8 +292,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         .collection("users")
         .doc(user.uid)
         .set(userModel.toMap());
-    Fluttertoast.showToast(msg: "Account created successfully :) ");
-
+    Fluttertoast.showToast(msg: "Account created successfully");
     AuthController.logIn(context, user.uid);
   }
 }
