@@ -58,7 +58,7 @@ class ProfileWidget extends StatelessWidget {
                   alignment: Alignment.center,
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
-                    child: CircularProgressIndicator(color: MyColor.brown),
+                    child: CircularProgressIndicator(color: MyColor.brown,),
                   ),
                 );
               }

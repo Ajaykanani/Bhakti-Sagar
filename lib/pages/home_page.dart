@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import '../utilities/audio_service.dart';
 import '../utilities/song_controller.dart';
+import '../utilities/storage_service.dart';
 import '../widgets/firing_spirit_lamp_widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -18,6 +19,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   AnimationController? _animationController;
   bool spiritPlay = false;
   bool spiritClicked = true;
+  final Storage storage = Storage();
 
   void spiritPlayStart() {
     _animationController = AnimationController(
@@ -31,7 +33,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _tabController = new TabController(initialIndex: 2, vsync: this, length: 5);
+    _tabController = TabController(initialIndex: 1, vsync: this, length: 3);
   }
 
   @override
@@ -76,17 +78,42 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               Positioned(
                 top: height*0.043,
                 left: width*0.08,
-                child: Container(
-                  height: height*0.555,
-                  width: width*0.84,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage(
-                          "assets/images/hanuman.jpg",
+                child: SongController.bhagwanName == ""
+                    ? Container(
+                        height: height*0.555,
+                        width: width*0.84,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage("assets/images/hanuman.jpg"),
+                            fit: BoxFit.fill,
+                          ),
                         ),
-                        fit: BoxFit.fill),
-                  ),
-                ),
+                      )
+                    :
+                FutureBuilder(
+                  future: storage.getBhagwanImage(SongController.bhagwanName),
+                  builder: (context, AsyncSnapshot snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+                      return Container(
+                        height: height*0.555,
+                        width: width*0.84,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage(snapshot.data.toString()),
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                      );
+                    } else {
+                      return Container(
+                        height: height*0.555,
+                        width: width*0.84,
+                        alignment: Alignment.center,
+                        child: CircularProgressIndicator(color: MyColor.brown),
+                      );
+                    }
+                  },
+                )
               ),
               Positioned(
                 top: 0,
@@ -192,20 +219,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     isScrollable: true,
                     tabs: [
                       Tab(
-                        text: "Image Switching",
-                      ),
-                      Tab(
                         text: "Repeat Song",
                       ),
                       Tab(
                         text: "Home",
                       ),
                       Tab(
-                        text: "Hindi Lyrics",
-                      ),
-                      Tab(
-                        text: "English Lyrics",
-                      ),
+                        text: "Song Controls",
+                      )
                     ],
                   ),
                 ),
@@ -214,9 +235,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   child: TabBarView(
                     controller: _tabController,
                     children: [
-                      Container(
-                        color: MyColor.deepPurpleAccent,
-                      ),
                       Container(
                         color: MyColor.amberAccent,
                       ),
@@ -241,7 +259,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                   }
                                   else {
                                     SongController.songPlay = false;
-                                    MyAudioPlayer.stopMusic();
+                                    MyAudioPlayer.pauseMusic();
                                   }
                                   setState((){});
                                 },
@@ -298,8 +316,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                               ),
                               InkWell(
                                 onTap: () {
-                                  Navigator.push(
-                                    context,
+                                  Navigator.of(context).pushReplacement(
                                     MaterialPageRoute(builder: (context) => MoreSongsPage1()),
                                   );
                                 },
@@ -327,10 +344,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       ),
                       Container(
                         color: MyColor.indigo,
-                      ),
-                      Container(
-                        color: MyColor.pink,
-                      ),
+                      )
                     ],
                   ),
                 ),
